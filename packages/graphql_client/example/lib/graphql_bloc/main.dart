@@ -42,8 +42,8 @@ class _MyHomePageState extends State<GraphQLBlocPatternScreen> {
             ),
             StreamBuilder<List<Repo>>(
               stream: bloc.repoStream,
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<Repo>> snapshot) {
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<Repo>> snapshot) {
                 if (snapshot.hasError) {
                   return Text('\nErrors: \n  ' +
                       (snapshot.error as List<dynamic>).join(',\n  '));

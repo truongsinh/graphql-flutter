@@ -7,7 +7,7 @@ import '../graphql_operation/mutations/mutations.dart' as mutations;
 import '../graphql_operation/queries/readRepositories.dart' as queries;
 
 class GraphQLWidgetScreen extends StatelessWidget {
-  const GraphQLWidgetScreen(): super();
+  const GraphQLWidgetScreen() : super();
   @override
   Widget build(BuildContext context) {
     final HttpLink httpLink = HttpLink(
@@ -98,7 +98,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
 
                 if (result.data == null && result.errors == null) {
-                  return const Text('Both data and errors are null, this is a known bug after refactoring, you might forget to set Github token');
+                  return const Text(
+                      'Both data and errors are null, this is a known bug after refactoring, you might forget to set Github token');
                 }
 
                 // result.data can be either a [List<dynamic>] or a [Map<String, dynamic>]

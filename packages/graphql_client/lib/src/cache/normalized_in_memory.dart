@@ -72,7 +72,8 @@ class NormalizedInMemoryCache extends InMemoryCache {
   */
   @override
   void write(String key, Object value) {
-    final Object normalized = traverseValues(value as Map<String, dynamic>, _normalize);
+    final Object normalized =
+        traverseValues(value as Map<String, dynamic>, _normalize);
     super.write(key, normalized);
   }
 }

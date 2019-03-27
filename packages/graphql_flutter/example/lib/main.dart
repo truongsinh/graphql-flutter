@@ -22,7 +22,7 @@ void main() => runApp(
                             context,
                             MaterialPageRoute<GraphQLWidgetScreen>(
                               builder: (BuildContext context) =>
-                              const GraphQLWidgetScreen(),
+                                  const GraphQLWidgetScreen(),
                             ),
                           );
                         },

@@ -22,7 +22,7 @@ void main() => runApp(
                             context,
                             MaterialPageRoute<GraphQLBlocPatternScreen>(
                               builder: (BuildContext context) =>
-                              GraphQLBlocPatternScreen(),
+                                  GraphQLBlocPatternScreen(),
                             ),
                           );
                         },

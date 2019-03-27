@@ -85,7 +85,8 @@ class MutationState extends State<Mutation> {
   }
 
   Iterable<OnData> get callbacks {
-    return <OnData>[widget.onCompleted, update].where((dynamic any) => any != null);
+    return <OnData>[widget.onCompleted, update]
+        .where((dynamic any) => any != null);
   }
 
   void runMutation(Map<String, dynamic> variables) => observableQuery
