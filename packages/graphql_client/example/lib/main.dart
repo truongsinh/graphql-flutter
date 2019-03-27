@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import './graphql_bloc/main.dart' show GraphQLBlocPatternScreen;
-import './graphql_widget/main.dart' show GraphQLWidgetScreen;
 
 void main() => runApp(
       MaterialApp(
@@ -21,21 +20,9 @@ void main() => runApp(
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute<GraphQLWidgetScreen>(
+                            MaterialPageRoute<GraphQLBlocPatternScreen>(
                               builder: (BuildContext context) =>
                               GraphQLBlocPatternScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                      RaisedButton(
-                        child: const Text('GraphQL Widget'),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute<GraphQLWidgetScreen>(
-                              builder: (BuildContext context) =>
-                              const GraphQLWidgetScreen(),
                             ),
                           );
                         },

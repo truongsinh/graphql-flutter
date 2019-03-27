@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:graphql_flutter/src/link/link.dart';
-import 'package:graphql_flutter/src/link/operation.dart';
-import 'package:graphql_flutter/src/link/fetch_result.dart';
+import 'package:graphql_client/src/link/link.dart';
+import 'package:graphql_client/src/link/operation.dart';
+import 'package:graphql_client/src/link/fetch_result.dart';
 
 typedef GetToken = Future<String> Function();
 

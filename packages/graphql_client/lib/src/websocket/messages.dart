@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:uuid_enhanced/uuid.dart';
 
 /// These messages represent the structures used for Client-server communication
 /// in a GraphQL web-socket subscription. Each message is represented in a JSON
@@ -92,7 +93,7 @@ class SubscriptionRequest extends JsonSerializable {
 class StartOperation extends GraphQLSocketMessage {
   StartOperation(this.id, this.payload) : super(MessageTypes.GQL_START);
 
-  final String id;
+  final Uuid id;
   final SubscriptionRequest payload;
 
   @override
@@ -108,7 +109,7 @@ class StartOperation extends GraphQLSocketMessage {
 class StopOperation extends GraphQLSocketMessage {
   StopOperation(this.id) : super(MessageTypes.GQL_STOP);
 
-  final String id;
+  final Uuid id;
 
   @override
   dynamic toJson() => <String, dynamic>{

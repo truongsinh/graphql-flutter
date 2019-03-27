@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 
-import 'package:graphql_flutter/src/core/query_manager.dart';
-import 'package:graphql_flutter/src/core/query_options.dart';
-import 'package:graphql_flutter/src/core/query_result.dart';
+import 'package:graphql_client/src/core/query_manager.dart';
+import 'package:graphql_client/src/core/query_options.dart';
+import 'package:graphql_client/src/core/query_result.dart';
 
-import 'package:graphql_flutter/src/scheduler/scheduler.dart';
+import 'package:graphql_client/src/scheduler/scheduler.dart';
 
 typedef OnData = void Function(QueryResult result);
 

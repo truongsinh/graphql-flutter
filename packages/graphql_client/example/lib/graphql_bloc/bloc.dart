@@ -1,5 +1,5 @@
 import 'package:rxdart/subjects.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:graphql_client/graphql_client.dart';
 
 import '../config.dart' show YOUR_PERSONAL_ACCESS_TOKEN;
 import '../graphql_operation/mutations/mutations.dart' as mutations;

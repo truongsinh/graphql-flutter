@@ -1,5 +1,6 @@
 import 'package:test/test.dart';
-import 'package:graphql_flutter/src/cache/normalized_in_memory.dart';
+import 'package:graphql_client/src/cache/normalized_in_memory.dart';
+import 'package:graphql_client/src/cache/normalized_in_memory_vm.dart';
 
 List<String> reference(String key) {
   return <String>['cache/reference', key];
@@ -109,7 +110,7 @@ final Map<String, Object> updatedSubsetOperationData = <String, Object>{
 
 void main() {
   group('Normalizes writes', () {
-    final NormalizedInMemoryCache cache = NormalizedInMemoryCache(
+    final NormalizedInMemoryCache cache = NormalizedInMemoryCacheVM(
       dataIdFromObject: typenameDataIdFromObject,
     );
 

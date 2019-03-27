@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:uuid/uuid.dart';
+import 'package:uuid_enhanced/uuid.dart';
 
-import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:graphql_client/graphql_client.dart';
 
 SocketClient socketClient;
 
@@ -15,7 +15,6 @@ class SocketClient {
     _socket.write(InitOperation(_initPayload));
   }
 
-  final Uuid _uuid = Uuid();
   final GraphQLSocket _socket;
   static Map<String, String> _initPayload;
 
@@ -43,7 +42,7 @@ class SocketClient {
   }
 
   Stream<SubscriptionData> subscribe(final SubscriptionRequest payload) {
-    final String id = _uuid.v4();
+    final Uuid id = Uuid.randomUuid();
 
     final StreamController<SubscriptionData> response =
         StreamController<SubscriptionData>();

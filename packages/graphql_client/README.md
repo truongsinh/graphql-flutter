@@ -42,13 +42,13 @@ First depend on the library by adding this to your packages `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  graphql_flutter: ^1.0.0-beta
+  graphql_client: ^1.0.0-beta
 ```
 
 Now inside your Dart code you can import it.
 
 ```dart
-import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:graphql_client/graphql_client.dart';
 ```
 
 ## Upgrading from 0.x.x
@@ -166,7 +166,7 @@ To use the client it first needs to be initialized with an link and cache. For t
 ```dart
 ...
 
-import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:graphql_client/graphql_client.dart';
 
 void main() {
   final HttpLink httpLink = HttpLink(
@@ -506,8 +506,8 @@ This project follows the [all-contributors](https://github.com/kentcdodds/all-co
 [build-status-link]: https://cirrus-ci.com/github/truongsinh/dart-uuid/master
 [coverage-badge]: https://codecov.io/gh/truongsinh/graphql-flutter/branch/master/graph/badge.svg
 [coverage-link]: https://codecov.io/gh/truongsinh/graphql-flutter
-[version-badge]: https://img.shields.io/pub/v/graphql_flutter.svg?style=flat-square
-[package-link]: https://pub.dartlang.org/packages/graphql_flutter/versions/1.0.0-alpha.3
+[version-badge]: https://img.shields.io/pub/v/graphql_client.svg?style=flat-square
+[package-link]: https://pub.dartlang.org/packages/graphql_client/versions/1.0.0-alpha.3
 [license-badge]: https://img.shields.io/github/license/zino-app/graphql-flutter.svg?style=flat-square
 [license-link]: https://github.com/zino-app/graphql-flutter/blob/master/LICENSE
 [prs-badge]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square

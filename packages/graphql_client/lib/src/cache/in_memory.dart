@@ -2,10 +2,9 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
+import 'package:meta/meta.dart';
 
-import 'package:path_provider/path_provider.dart';
-
-import 'package:graphql_flutter/src/cache/cache.dart';
+import 'package:graphql_client/src/cache/cache.dart';
 
 class InMemoryCache implements Cache {
   InMemoryCache({
@@ -68,9 +67,14 @@ class InMemoryCache implements Cache {
       return customStorageDirectory.path;
     }
 
-    final Directory directory = await getApplicationDocumentsDirectory();
+    final Directory directory = await temporaryDirectory;
 
     return directory.path;
+  }
+
+  @protected
+  Future<Directory> get temporaryDirectory {
+    throw Exception('temporaryDirectory should be implemented');
   }
 
   Future<File> get _localStorageFile async {

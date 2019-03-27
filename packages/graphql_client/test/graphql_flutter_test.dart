@@ -6,7 +6,7 @@ import 'package:path/path.dart' show dirname, join;
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:http/http.dart' as http;
-import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:graphql_client/graphql_client.dart';
 
 class MockHttpClient extends Mock implements http.Client {}
 
@@ -53,9 +53,8 @@ void main() {
       );
 
       link = authLink.concat(httpLink as Link);
-
       graphQLClientClient = GraphQLClient(
-        cache: NormalizedInMemoryCache(
+        cache: NormalizedInMemoryCacheVM(
           dataIdFromObject: typenameDataIdFromObject,
         ),
         link: link,
@@ -221,7 +220,7 @@ void main() {
       link = authLink.concat(httpLink as Link);
 
       graphQLClientClient = GraphQLClient(
-        cache: NormalizedInMemoryCache(
+        cache: NormalizedInMemoryCacheVM(
           dataIdFromObject: typenameDataIdFromObject,
         ),
         link: link,
