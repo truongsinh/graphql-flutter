@@ -302,11 +302,13 @@ void main() {
         return r;
       });
 
+      final String basePath = dirname(Platform.script.path);
+      final String realPath =
+          basePath.endsWith('test') ? basePath : join(basePath, 'test');
       final List<File> files =
           <String>['sample_upload.jpg', 'sample_upload.mov']
               .map((String fileName) => join(
-                    dirname(Platform.script.path),
-                    'test',
+                    realPath,
                     fileName,
                   ))
               .map((String filePath) => File(filePath))
@@ -319,6 +321,9 @@ void main() {
         },
       );
       final QueryResult r = await graphQLClientClient.mutate(_options);
+
+      expect(r.errors, isNull);
+      expect(r.data, isNotNull);
 
       final http.MultipartRequest request =
           verify(mockHttpClient.send(captureAny)).captured.first
@@ -333,8 +338,6 @@ void main() {
       expect(contentTypeStringSplit[0], 'multipart/form-data');
       await expectUploadBody(bodyBytes, contentTypeStringSplit[1], files);
 
-      expect(r.errors, isNull);
-      expect(r.data, isNotNull);
       final List<Map<String, dynamic>> multipleUpload =
           (r.data['multipleUpload'] as List<dynamic>)
               .cast<Map<String, dynamic>>();
