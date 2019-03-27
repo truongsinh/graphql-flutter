@@ -201,7 +201,6 @@ void main() {
         path
       }
     }
-
     ''';
 
     setUp(() {
