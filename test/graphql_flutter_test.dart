@@ -222,62 +222,53 @@ void main() {
         link: link,
       );
     });
-    Future<void> expectUploadBody(http.ByteStream bodyBytesStream,
-        String boundary, List<File> files) async {
-      final Uint8List bodyBytes = await bodyBytesStream.toBytes();
-      int i = 0;
-      expect(String.fromCharCodes(bodyBytes.sublist(i, i += 2)), '--');
-      expect(String.fromCharCodes(bodyBytes.sublist(i, i += 70)), boundary);
-      expect(String.fromCharCodes(bodyBytes.sublist(i, i += 55)),
-          '\r\ncontent-disposition: form-data; name="operations"\r\n\r\n');
-      expect(
-          String.fromCharCodes(bodyBytes.sublist(i, i += 226)),
-          r'''
-{"operationName":null,"variables":{"files":[null,null]},"query":"    mutation($files: [Upload!]!) {\n      multipleUpload(files: $files) {\n        id\n        filename\n        mimetype\n        path\n      }\n    }\n\n    "}
-      '''
-              .trim());
-      expect(String.fromCharCodes(bodyBytes.sublist(i, i += 4)), '\r\n--');
-      expect(String.fromCharCodes(bodyBytes.sublist(i, i += 70)), boundary);
-      expect(String.fromCharCodes(bodyBytes.sublist(i, i += 101)),
-          '\r\ncontent-disposition: form-data; name="map"\r\n\r\n{"0":["variables.files.0"],"1":["variables.files.1"]}');
-      expect(String.fromCharCodes(bodyBytes.sublist(i, i += 4)), '\r\n--');
-      // then random 51 chars for boundary
-      expect(String.fromCharCodes(bodyBytes.sublist(i, i += 70)), boundary);
-      expect(String.fromCharCodes(bodyBytes.sublist(i, i += 102)),
-          '\r\ncontent-type: image/jpeg\r\ncontent-disposition: form-data; name="0"; filename="sample_upload.jpg"\r\n\r\n');
-      // binary starts
-      expect(await files[0].readAsBytes(), bodyBytes.sublist(i, i += 256));
-      expect(String.fromCharCodes(bodyBytes.sublist(i, i += 4)), '\r\n--');
-      // then random 51 chars for boundary
-      expect(String.fromCharCodes(bodyBytes.sublist(i, i += 70)), boundary);
-      expect(String.fromCharCodes(bodyBytes.sublist(i, i += 107)),
-          '\r\ncontent-type: video/quicktime\r\ncontent-disposition: form-data; name="1"; filename="sample_upload.mov"\r\n\r\n');
-      // binary starts
-      expect(await files[1].readAsBytes(), bodyBytes.sublist(i, i += 271));
-      expect(String.fromCharCodes(bodyBytes.sublist(i, i += 4)), '\r\n--');
-      // then random 51 chars for boundary
-      expect(String.fromCharCodes(bodyBytes.sublist(i, i += 70)), boundary);
-      expect(String.fromCharCodes(bodyBytes.sublist(i, i += 4)), '--\r\n');
-      expect(bodyBytes.lengthInBytes, i);
-    }
 
     test('upload success', () async {
-      final List<File> files =
-          <String>['sample_upload.jpg', 'sample_upload.mov']
-              .map((String fileName) => join(
-                    dirname(Platform.script.path),
-                    'test',
-                    fileName,
-                  ))
-              .map((String filePath) => File(filePath))
-              .toList();
-
-      final MutationOptions _options = MutationOptions(
-        document: uploadMutation,
-        variables: <String, dynamic>{
-          'files': files,
-        },
-      );
+      Future<void> expectUploadBody(http.ByteStream bodyBytesStream,
+          String boundary, List<File> files) async {
+        final List<Function> expectContinuationList = (() {
+          int i = 0;
+          return [
+            // ExpectString
+            (Uint8List actual, String expected) => expect(
+                String.fromCharCodes(actual.sublist(i, i += expected.length)),
+                expected),
+            // ExpectBytes
+            (Uint8List actual, Uint8List expected) =>
+                expect(actual.sublist(i, i += expected.length), expected),
+            // Expect final length
+            (int expectedLength) => expect(i, expectedLength),
+          ];
+        })();
+        final Function expectContinuationString = expectContinuationList[0];
+        final Function expectContinuationBytes = expectContinuationList[1];
+        final Function expectContinuationLength = expectContinuationList[2];
+        final Uint8List bodyBytes = await bodyBytesStream.toBytes();
+        expectContinuationString(bodyBytes, '--');
+        expectContinuationString(bodyBytes, boundary);
+        expectContinuationString(bodyBytes,
+            '\r\ncontent-disposition: form-data; name="operations"\r\n\r\n');
+        expectContinuationString(bodyBytes,
+            r'{"operationName":null,"variables":{"files":[null,null]},"query":"    mutation($files: [Upload!]!) {\n      multipleUpload(files: $files) {\n        id\n        filename\n        mimetype\n        path\n      }\n    }\n    "}');
+        expectContinuationString(bodyBytes, '\r\n--');
+        expectContinuationString(bodyBytes, boundary);
+        expectContinuationString(bodyBytes,
+            '\r\ncontent-disposition: form-data; name="map"\r\n\r\n{"0":["variables.files.0"],"1":["variables.files.1"]}');
+        expectContinuationString(bodyBytes, '\r\n--');
+        expectContinuationString(bodyBytes, boundary);
+        expectContinuationString(bodyBytes,
+            '\r\ncontent-type: image/jpeg\r\ncontent-disposition: form-data; name="0"; filename="sample_upload.jpg"\r\n\r\n');
+        expectContinuationBytes(bodyBytes, await files[0].readAsBytes());
+        expectContinuationString(bodyBytes, '\r\n--');
+        expectContinuationString(bodyBytes, boundary);
+        expectContinuationString(bodyBytes,
+            '\r\ncontent-type: video/quicktime\r\ncontent-disposition: form-data; name="1"; filename="sample_upload.mov"\r\n\r\n');
+        expectContinuationBytes(bodyBytes, await files[1].readAsBytes());
+        expectContinuationString(bodyBytes, '\r\n--');
+        expectContinuationString(bodyBytes, boundary);
+        expectContinuationString(bodyBytes, '--\r\n');
+        expectContinuationLength(bodyBytes.lengthInBytes);
+      }
 
       http.ByteStream bodyBytes;
       when(mockHttpClient.send(any)).thenAnswer((Invocation a) async {
@@ -311,6 +302,22 @@ void main() {
         return r;
       });
 
+      final List<File> files =
+          <String>['sample_upload.jpg', 'sample_upload.mov']
+              .map((String fileName) => join(
+                    dirname(Platform.script.path),
+                    'test',
+                    fileName,
+                  ))
+              .map((String filePath) => File(filePath))
+              .toList();
+
+      final MutationOptions _options = MutationOptions(
+        document: uploadMutation,
+        variables: <String, dynamic>{
+          'files': files,
+        },
+      );
       final QueryResult r = await graphQLClientClient.mutate(_options);
 
       final http.MultipartRequest request =
