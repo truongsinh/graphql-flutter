@@ -1,6 +1,6 @@
 import 'dart:collection' show SplayTreeMap;
 import 'dart:convert' show json;
-import 'dart:io' show File;
+import 'package:graphql/src/io.dart' show File;
 
 import 'package:meta/meta.dart';
 

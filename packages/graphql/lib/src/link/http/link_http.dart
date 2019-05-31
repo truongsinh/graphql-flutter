@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'package:graphql/src/io.dart' show File;
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:io' show Directory;
+import 'package:graphql/src/io.dart' show Directory;
 import 'package:test/test.dart';
 import 'package:graphql/src/cache/in_memory.dart';
 

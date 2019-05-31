@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+import 'package:graphql/src/io.dart' show CompressionOptions, WebSocket, WebSocketStatus;
 
 import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';

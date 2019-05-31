@@ -1,7 +1,7 @@
 // This
 import 'dart:mirrors';
 import 'dart:convert';
-import 'dart:io' show File, Directory;
+import 'package:graphql/src/io.dart' show File, Directory;
 
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' show dirname, join;

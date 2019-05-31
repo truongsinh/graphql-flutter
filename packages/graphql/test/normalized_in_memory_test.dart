@@ -1,4 +1,4 @@
-import 'dart:io' show Directory;
+import 'package:graphql/src/io.dart' show Directory;
 
 import 'package:test/test.dart';
 

@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' show IOSink, FileSystemException;
+import 'package:graphql/src/io.dart' show File, Directory;
 
 import 'package:meta/meta.dart';
 // TODO need to think about this
