@@ -123,6 +123,7 @@ class QueryManager {
         optimistic: false,
       );
     } catch (error) {
+      rethrow;
       queryResult ??= QueryResult(
         loading: false,
         optimistic: false,

@@ -1,10 +1,11 @@
 import 'dart:collection' show SplayTreeMap;
 import 'dart:convert' show json;
-import 'dart:io' show File;
 
+import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 
 import 'package:graphql/src/utilities/get_from_ast.dart' show getOperationName;
+import 'package:graphql/src/utilities/file.dart' show File;
 
 class RawOperationData {
   RawOperationData({
@@ -47,8 +48,8 @@ class RawOperationData {
     /// SplayTreeMap is always sorted
     final String encodedVariables =
         json.encode(variables, toEncodable: (dynamic object) {
-      if (object is File) {
-        return object.path;
+      if (object is MultipartFile) {
+        return object.filename;
       }
       return object;
     });

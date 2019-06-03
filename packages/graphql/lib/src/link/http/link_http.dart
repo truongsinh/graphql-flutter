@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -15,6 +14,7 @@ import 'package:graphql/src/link/operation.dart';
 import 'package:graphql/src/link/fetch_result.dart';
 import 'package:graphql/src/link/http/fallback_http_config.dart';
 import 'package:graphql/src/link/http/http_config.dart';
+import 'package:graphql/src/utilities/file.dart' show File;
 
 class HttpLink extends Link {
   HttpLink({
@@ -96,6 +96,7 @@ class HttpLink extends Link {
 
                 controller.add(parsedResponse);
               } catch (error) {
+                rethrow;
                 print(<dynamic>[error.runtimeType, error]);
                 controller.addError(error);
               }
@@ -110,12 +111,12 @@ class HttpLink extends Link {
         );
 }
 
-Map<String, File> _getFileMap(
+Map<String, MultipartFile> _getFileMap(
   dynamic body, {
-  Map<String, File> currentMap,
+  Map<String, MultipartFile> currentMap,
   List<String> currentPath = const <String>[],
 }) {
-  currentMap ??= <String, File>{};
+  currentMap ??= <String, MultipartFile>{};
   if (body is Map<String, dynamic>) {
     final Iterable<MapEntry<String, dynamic>> entries = body.entries;
     for (MapEntry<String, dynamic> element in entries) {
@@ -137,8 +138,8 @@ Map<String, File> _getFileMap(
     }
     return currentMap;
   }
-  if (body is File) {
-    return currentMap..addAll(<String, File>{currentPath.join('.'): body});
+  if (body is MultipartFile) {
+    return currentMap..addAll(<String, MultipartFile>{currentPath.join('.'): body});
   }
   // else should only be either String, num, null; NOTHING else
   return currentMap;
@@ -149,7 +150,7 @@ Future<BaseRequest> _prepareRequest(
   Map<String, dynamic> body,
   Map<String, String> httpHeaders,
 ) async {
-  final Map<String, File> fileMap = _getFileMap(body);
+  final Map<String, MultipartFile> fileMap = _getFileMap(body);
   if (fileMap.isEmpty) {
     final Request r = Request('post', Uri.parse(url));
     r.headers.addAll(httpHeaders);
@@ -160,7 +161,7 @@ Future<BaseRequest> _prepareRequest(
   final MultipartRequest r = MultipartRequest('post', Uri.parse(url));
   r.headers.addAll(httpHeaders);
   r.fields['operations'] = json.encode(body, toEncodable: (dynamic object) {
-    if (object is File) {
+    if (object is MultipartFile) {
       return null;
     }
     return object.toJson();
@@ -169,23 +170,22 @@ Future<BaseRequest> _prepareRequest(
   final Map<String, List<String>> fileMapping = <String, List<String>>{};
   final List<MultipartFile> fileList = <MultipartFile>[];
 
-  final List<MapEntry<String, File>> fileMapEntries =
+  final List<MapEntry<String, MultipartFile>> fileMapEntries =
       fileMap.entries.toList(growable: false);
 
   for (int i = 0; i < fileMapEntries.length; i++) {
-    final MapEntry<String, File> entry = fileMapEntries[i];
+    final MapEntry<String, MultipartFile> entry = fileMapEntries[i];
     final String indexString = i.toString();
     fileMapping.addAll(<String, List<String>>{
       indexString: <String>[entry.key],
     });
-    final File f = entry.value;
-    final String fileName = basename(f.path);
+    final MultipartFile f = entry.value;
     fileList.add(MultipartFile(
       indexString,
-      f.openRead(),
-      await f.length(),
-      contentType: MediaType.parse(lookupMimeType(fileName)),
-      filename: fileName,
+      f.finalize(),
+      f.length,
+      contentType: f.contentType,
+      filename: f.filename,
     ));
   }
 
