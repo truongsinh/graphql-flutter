@@ -1,8 +1,12 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+<<<<<<< HEAD
 import 'dart:io' show IOSink, FileSystemException;
 import 'package:graphql/src/io.dart' show File, Directory;
+=======
+import 'dart:io' show Directory, File, IOSink, FileSystemException;
+>>>>>>> 4fa6c5742778b89e839d81498c0350f6627e737d
 
 import 'package:meta/meta.dart';
 // TODO need to think about this
@@ -121,7 +125,7 @@ class InMemoryCache implements Cache {
       final File file = await _localStorageFile;
       final HashMap<String, dynamic> storedHashMap = HashMap<String, dynamic>();
 
-      if (file.existsSync()) {
+      if (await file.exists()) {
         final Stream<List<int>> inputStream = file.openRead();
 
         await for (String line in inputStream

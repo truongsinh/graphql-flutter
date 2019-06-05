@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import 'dart:io' show stderr, stdout, exit;
+=======
+import 'dart:io' show stdout, stderr, exit;
+>>>>>>> 4fa6c5742778b89e839d81498c0350f6627e737d
 
 import 'package:args/args.dart';
 import 'package:graphql/client.dart';

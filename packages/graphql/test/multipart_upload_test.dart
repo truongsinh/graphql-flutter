@@ -13,7 +13,7 @@ class MockHttpClient extends Mock implements http.Client {}
 
 NormalizedInMemoryCache getTestCache() => NormalizedInMemoryCache(
       dataIdFromObject: typenameDataIdFromObject,
-      storageProvider: () => Directory.systemTemp.createTempSync('file_test_'),
+      storageProvider: () => Directory.systemTemp.createTemp('file_test_'),
     );
 
 void main() {
@@ -173,6 +173,8 @@ void main() {
           'path': './uploads/5Ea18qlMur-sample_upload.mov'
         },
       ]);
+    }, onPlatform: {
+      "browser": Skip("Browser does not support dart:mirrors"),
     });
 
     //test('upload fail error response', () {
