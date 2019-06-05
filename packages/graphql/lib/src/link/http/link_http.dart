@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:graphql/src/io.dart' show File;
 import 'dart:typed_data';
 
+import 'package:graphql/src/exception.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
@@ -35,7 +36,8 @@ class HttpLink extends Link {
           ]) {
             if (operation.isSubscription) {
               if (forward == null) {
-                throw Exception('This link does not support subscriptions.');
+                // @todo this link = what link?
+                throw GraphQLException('This link does not support subscriptions.');
               }
               return forward(operation);
             }

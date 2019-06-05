@@ -4,11 +4,13 @@ import 'package:graphql/src/utilities/traverse.dart';
 import 'package:graphql/src/utilities/helpers.dart';
 import 'package:graphql/src/cache/in_memory.dart';
 import 'package:graphql/src/cache/lazy_cache_map.dart';
+import 'package:graphql/src/exception.dart';
 
 typedef DataIdFromObject = String Function(Object node);
 
-class NormalizationException implements Exception {
-  NormalizationException(this.cause, this.overflowError, this.value);
+class NormalizationException extends GraphQLException {
+  NormalizationException(this.cause, this.overflowError, this.value)
+      : super(cause);
 
   StackOverflowError overflowError;
   String cause;
@@ -66,17 +68,15 @@ class NormalizedInMemoryCache extends InMemoryCache {
   dynamic denormalizedRead(String key) {
     try {
       return Traversal(_denormalizingDereference).traverse(read(key));
-    } catch (error) {
-      if (error is StackOverflowError) {
-        throw NormalizationException(
-          '''
+    } on StackOverflowError catch (error) {
+      throw NormalizationException(
+        '''
           Denormalization failed for $key this is likely caused by a circular reference.
           Please ensure dataIdFromObject returns a unique identifier for all possible entities in your system
           ''',
-          error,
-          key,
-        );
-      }
+        error,
+        key,
+      );
     }
   }
 

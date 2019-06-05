@@ -17,6 +17,7 @@ import 'package:graphql/src/cache/cache.dart';
 import 'package:graphql/src/cache/normalized_in_memory.dart'
     show NormalizedInMemoryCache;
 import 'package:graphql/src/cache/optimistic.dart' show OptimisticCache;
+import 'package:graphql/src/exception.dart';
 
 class QueryManager {
   QueryManager({
@@ -37,7 +38,7 @@ class QueryManager {
 
   ObservableQuery watchQuery(WatchQueryOptions options) {
     if (options.document == null) {
-      throw Exception(
+      throw GraphQLException(
         'document option is required. You must specify your GraphQL document in the query options.',
       );
     }
@@ -111,7 +112,7 @@ class QueryManager {
           fetchResult.errors == null &&
           (options.fetchPolicy == FetchPolicy.noCache ||
               options.fetchPolicy == FetchPolicy.networkOnly)) {
-        throw Exception(
+        throw GraphQLException(
           'Could not resolve that operation on the network. (${options.fetchPolicy.toString()})',
         );
       }
@@ -202,7 +203,7 @@ class QueryManager {
       }
 
       if (fetchPolicy == FetchPolicy.cacheOnly) {
-        throw Exception(
+        throw GraphQLException(
           'Could not find that operation in the cache. (${fetchPolicy.toString()})',
         );
       }

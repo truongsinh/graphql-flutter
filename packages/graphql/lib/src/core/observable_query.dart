@@ -6,6 +6,7 @@ import 'package:graphql/src/core/query_manager.dart';
 import 'package:graphql/src/core/query_options.dart';
 import 'package:graphql/src/core/query_result.dart';
 import 'package:graphql/src/scheduler/scheduler.dart';
+import 'package:graphql/src/exception.dart';
 
 typedef OnData = void Function(QueryResult result);
 
@@ -174,7 +175,7 @@ class ObservableQuery {
   void startPolling(int pollInterval) {
     if (options.fetchPolicy == FetchPolicy.cacheFirst ||
         options.fetchPolicy == FetchPolicy.cacheOnly) {
-      throw Exception(
+      throw GraphQLException(
         'Queries that specify the cacheFirst and cacheOnly fetch policies cannot also be polling queries.',
       );
     }
